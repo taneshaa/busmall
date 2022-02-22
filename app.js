@@ -3,6 +3,8 @@
 // img/merch storage
 let votesLimit = 20;
 
+let allMerch = [];
+
 // DOM references
 let container = document.getElementById('container');
 let imgOne = document.getElementById('img-one');
@@ -12,14 +14,14 @@ let resultsBtn = document.getElementById('show-results-btn');
 let showResults = document.getElementById('display-results-list')
 
 // constructor
-function merch(name, fileExtentsion = 'jpeg'){
-this.name = name;
-this.view = 0;
-this.clicks = 0;
-this.src = `img/${name}.${fileExtentsion}`;
-
-let allMerch = [];
+function Merch(name, fileExtentsion = 'jpeg') {
+  this.name = name;
+  this.view = 0;
+  this.clicks = 0;
+  this.src = `img/${name}.${fileExtentsion}`;
+  allMerch.push(this);
 }
+
 
 new Merch('bag');
 new Merch('banana');
@@ -41,58 +43,69 @@ new Merch('unicorn');
 new Merch('water-can');
 new Merch('wine-glass');
 
-console.log(allPhotos);
+console.log(allMerch);
 
-function getRandomIndex(){
-  return Math.floor(Math.random()* allMerch.length);
+function getRandomIndex() {
+  return Math.floor(Math.random() * allMerch.length);
 }
 
-function renderImgs(){
+function renderImgs() {
   let imgOneIndex = getRandomIndex();
   let imgTwoIndex = getRandomIndex();
+  let imgThreeIndex = getRandomIndex();
 
-  while(imgOneIndex === imgTwoIndex){
+  while (imgOneIndex === imgTwoIndex) {
     imgTwoIndex = getRandomIndex();
   }
-}
 
-imgOne.src = allMerch[imgOneIndex].src;
-imgTwo.src = allMerch[imgTwoIndex].name;
-imgThree.src = allMerch[imgThreeIndex].src;
-allMerch[imgThreeIndex].views++;
+  while (imgTwoIndex === imgThreeIndex) {
+    imgThreeIndex = getRandomIndex();
+  }
 
-imgOne.src = allMerch[imgOneIndex].src;
-imgTwo.src = allMerch[imgTwoIndex].name;
-imgThree.src = allMerch[imgThreeIndex].src;
-allMerch[imgThreeIndex].views++;
+  while (imgOneIndex === imgThreeIndex) {
+    imgOneIndex = getRandomIndex();
+  }
+
+
+  imgOne.src = allMerch[imgOneIndex].src;
+  imgOne.alt = allMerch[imgOneIndex].name;
+  allMerch[imgOneIndex].views++;
+
+  imgTwo.src = allMerch[imgTwoIndex].src;
+  imgTwo.alt = allMerch[imgTwoIndex].name;
+  allMerch[imgTwoIndex].views++;
+
+  imgThree.src = allMerch[imgThreeIndex].src;
+  imgThree.alt = allMerch[imgThreeIndex].name;
+  allMerch[imgThreeIndex].views++;
 }
 
 renderImgs();
 
-function handleClick(event){
-  votesAllowed--;
+function handleClick(event) {
+  votesLimit--;
 
   let imgClicked = event.target.alt;
 
-  for(let i = o; i < allMerch.length; i++){
-    if(imgClicked === allMerch[i].name){
+  for (let i = 0; i < allMerch.length; i++) {
+    if (imgClicked === allMerch[i].name) {
       allMerch[i].clicks++;
     }
   }
+
+  renderImgs();
+
+  if (votesLimit === 0) {
+    container.removeEventListener('click', handleClick);
+  }
 }
 
-renderImgs();
+function handleShowResults(event) {
 
-if(votesAllowed === 0){
-  container.removeEventListener('click', handleClick);
-}
-
-function handleShowResults(event){
-
-  if(votesAllowed === 0){
-    for(let i = 0; i < allMerch.length; i++){
+  if (votesLimit === 0) {
+    for (let i = 0; i < allMerch.length; i++) {
       let li = document.createElement('li');
-      li.textContent = `${allMerch[i].name} was viewed ${allMerch[i].views} times, and was voted for ${allMerch[i].clicks} times.`;
+      li.textContent = `${allMerch[i].name} was viewed ${allMerch[i].view} times, and was voted for ${allMerch[i].clicks} times.`;
       showResults.appendChild(li);
     }
   }
