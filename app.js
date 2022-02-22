@@ -1,27 +1,60 @@
 'use strict';
-let votesLimit = 15;
 
+// img/merch storage
+let votesLimit = 20;
 
-let allPhotos = [];
+// DOM references
+let container = document.getElementById('container');
+let imgOne = document.getElementById('img-one');
+let imgTwo = document.getElementById('img-two');
+let imgThree = document.getElementById('img-three');
+let resultsBtn = document.getElementById('show-results-btn');
+let showResults = document.getElementById('display-results-list')
 
-new Photo('bag');
-new Photo('banana');
-new Photo('bathroom');
-new Photo('boots');
-new Photo('breakfast');
-new Photo('bubblegum');
-new Photo('chair');
-new Photo('cthulhu');
-new Photo('dog-duck');
-new Photo('pen');
-new Photo('pet-sweep');
-new Photo('dragon');
-new Photo('scissors');
-new Photo('shark');
-new Photo('sweep', 'png');
-new Photo('tauntaun');
-new Photo('unicorn');
-new Photo('water-can');
-new Photo('wine-glass');
+// constructor
+function merch(name, fileExtentsion = 'jpeg'){
+this.name = name;
+this.view = 0;
+this.clicks = 0;
+this.src = `img/${name}.${fileExtentsion}`;
+
+let allMerch = [];
+}
+
+new Merch('bag');
+new Merch('banana');
+new Merch('bathroom');
+new Merch('boots');
+new Merch('breakfast');
+new Merch('bubblegum');
+new Merch('chair');
+new Merch('cthulhu');
+new Merch('dog-duck');
+new Merch('pen');
+new Merch('pet-sweep');
+new Merch('dragon');
+new Merch('scissors');
+new Merch('shark');
+new Merch('sweep', 'png');
+new Merch('tauntaun');
+new Merch('unicorn');
+new Merch('water-can');
+new Merch('wine-glass');
 
 console.log(allPhotos);
+
+function getRandomIndex(){
+  return Math.floor(Math.random()* allMerch.length);
+}
+
+function renderImgs(){
+  let imgOneIndex = getRandomIndex();
+  let imgTwoIndex = getRandomIndex();
+
+  while(imgOneIndex === imgTwoIndex){
+    imgTwoIndex = getRandomIndex();
+  }
+}
+
+imgOne.src = allMerch[imgOneIndex].src
+
