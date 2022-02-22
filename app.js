@@ -56,5 +56,49 @@ function renderImgs(){
   }
 }
 
-imgOne.src = allMerch[imgOneIndex].src
+imgOne.src = allMerch[imgOneIndex].src;
+imgTwo.src = allMerch[imgTwoIndex].name;
+imgThree.src = allMerch[imgThreeIndex].src;
+allMerch[imgThreeIndex].views++;
+
+imgOne.src = allMerch[imgOneIndex].src;
+imgTwo.src = allMerch[imgTwoIndex].name;
+imgThree.src = allMerch[imgThreeIndex].src;
+allMerch[imgThreeIndex].views++;
+}
+
+renderImgs();
+
+function handleClick(event){
+  votesAllowed--;
+
+  let imgClicked = event.target.alt;
+
+  for(let i = o; i < allMerch.length; i++){
+    if(imgClicked === allMerch[i].name){
+      allMerch[i].clicks++;
+    }
+  }
+}
+
+renderImgs();
+
+if(votesAllowed === 0){
+  container.removeEventListener('click', handleClick);
+}
+
+function handleShowResults(event){
+
+  if(votesAllowed === 0){
+    for(let i = 0; i < allMerch.length; i++){
+      let li = document.createElement('li');
+      li.textContent = `${allMerch[i].name} was viewed ${allMerch[i].views} times, and was voted for ${allMerch[i].clicks} times.`;
+      showResults.appendChild(li);
+    }
+  }
+}
+
+container.addEventListener('click', handleClick);
+
+resultsBtn.addEventListener('click', handleShowResults);
 
