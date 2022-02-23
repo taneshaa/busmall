@@ -10,13 +10,15 @@ let container = document.getElementById('container');
 let imgOne = document.getElementById('img-one');
 let imgTwo = document.getElementById('img-two');
 let imgThree = document.getElementById('img-three');
-let resultsBtn = document.getElementById('show-results-btn');
-let showResults = document.getElementById('display-results-list')
+// let resultsBtn = document.getElementById('show-results-btn');
+// let showResults = document.getElementById('display-results-list')
+
+let ctx = document.getElementById('myChart').getContext('2d');
 
 // constructor
 function Merch(name, fileExtentsion = 'jpeg') {
   this.name = name;
-  this.view = 0;
+  this.views = 0;
   this.clicks = 0;
   this.src = `img/${name}.${fileExtentsion}`;
   allMerch.push(this);
@@ -48,36 +50,44 @@ console.log(allMerch);
 function getRandomIndex() {
   return Math.floor(Math.random() * allMerch.length);
 }
+let randomIndexes = [];
 
 function renderImgs() {
-  let imgOneIndex = getRandomIndex();
-  let imgTwoIndex = getRandomIndex();
-  let imgThreeIndex = getRandomIndex();
-
-  while (imgOneIndex === imgTwoIndex) {
-    imgTwoIndex = getRandomIndex();
+  while (randomIndexes.length < 6) {
+    let randoNum = getRandomIndex();
+    while (!randomIndexes.includes(randoNum)) {
+      randomIndexes.push(randoNum);
+    }
   }
+  let imgOneIndex = randomIndexes.shift();
+  let imgTwoIndex = randomIndexes.shift();
+  let imgThreeIndex = randomIndexes.shift();
 
-  while (imgTwoIndex === imgThreeIndex) {
-    imgThreeIndex = getRandomIndex();
-  }
+  // while (imgOneIndex === imgTwoIndex) {
+  //   imgTwoIndex = getRandomIndex();
+  // }
 
-  while (imgOneIndex === imgThreeIndex) {
-    imgOneIndex = getRandomIndex();
-  }
+  // while (imgTwoIndex === imgThreeIndex) {
+  //   imgThreeIndex = getRandomIndex();
+  // }
+
+  // while (imgOneIndex === imgThreeIndex) {
+  //   imgOneIndex = getRandomIndex();
+  // }
 
 
   imgOne.src = allMerch[imgOneIndex].src;
   imgOne.alt = allMerch[imgOneIndex].name;
-  allMerch[imgOneIndex].views++;
+  allMerch[imgOneIndex].views += 1;
+  // console.log('this is line 73', allMerch[imgOneIndex]);
 
   imgTwo.src = allMerch[imgTwoIndex].src;
   imgTwo.alt = allMerch[imgTwoIndex].name;
-  allMerch[imgTwoIndex].views++;
+  allMerch[imgTwoIndex].views += 1;
 
   imgThree.src = allMerch[imgThreeIndex].src;
   imgThree.alt = allMerch[imgThreeIndex].name;
-  allMerch[imgThreeIndex].views++;
+  allMerch[imgThreeIndex].views += 1;
 }
 
 renderImgs();
@@ -97,21 +107,104 @@ function handleClick(event) {
 
   if (votesLimit === 0) {
     container.removeEventListener('click', handleClick);
+    renderChart();
   }
 }
 
-function handleShowResults(event) {
+function renderChart() {
+  let itemNames = [];
+  let itemVotes = [];
+  let itemViews = [];
 
-  if (votesLimit === 0) {
-    for (let i = 0; i < allMerch.length; i++) {
-      let li = document.createElement('li');
-      li.textContent = `${allMerch[i].name} was viewed ${allMerch[i].view} times, and was voted for ${allMerch[i].clicks} times.`;
-      showResults.appendChild(li);
+  for (let i = 0; i < allMerch.length; i++) {
+    itemNames.push(allMerch[i].name);
+    itemVotes.push(allMerch[i].clicks);
+    itemViews.push(allMerch[i].views);
+  }
+  let chartObject = {
+    type: 'bar',
+    data: {
+      labels: itemNames,
+      datasets: [{
+        label: '# of Votes',
+        data: itemVotes,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      },
+      {
+        label: '# of Views',
+        data: itemViews,
+        backgroundColor: [
+          'red',
+          'orange',
+          'yellow',
+          'green',
+          'blue',
+          'purple'
+        ],
+        borderColor: [
+          'pink',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      },]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
     }
-  }
+  };
+  new Chart(ctx, chartObject);
 }
+
+// function handleShowResults(event) {
+
+//   if (votesLimit === 0) {
+//     for (let i = 0; i < allMerch.length; i++) {
+//       let li = document.createElement('li');
+//       li.textContent = `${allMerch[i].name} was viewed ${allMerch[i].views} times, and was voted for ${allMerch[i].clicks} times.`;
+//       showResults.appendChild(li);
+//     }
+//   }
+// }
 
 container.addEventListener('click', handleClick);
 
-resultsBtn.addEventListener('click', handleShowResults);
+// resultsBtn.addEventListener('click', handleShowResults);
+
+// while(itemOne === itemTwo){
+//   itemTwo = getRandomImg();
+// }
+
+// while (itemOne === itemThree || itemTwo === itemThree){
+//   itemThree = getRandomImg();
+// }
+
+// while(randomIndexes.length < 3){
+//   let randoNum = getRandomImg();
+//   while(!randomIndexes.includes(randoNum));
+//   randomIndexes.push(randoNum);
+// }
 
