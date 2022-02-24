@@ -27,35 +27,40 @@ function Merch(name, fileExtentsion = 'jpeg') {
   allMerch.push(this);
   console.log(allMerch.length);
 }
+ 
 
 //takes the data and stores in it local browser (array in this case means collected data) 
 function setLocalStorage(array) {
   localStorage.setItem('cart', JSON.stringify(array));
 }
 
+function getLocalStorage(array) {
+  localStorage.getItem('cart', JSON.parse(array));
+}
+
 // checking for items in allMerch, if there are none in allMerch, it makes the items using newMerch
 //if (allMerch.length === 0) {
 
-  //items
-  new Merch('bag');
-  new Merch('banana');
-  new Merch('bathroom');
-  new Merch('boots');
-  new Merch('breakfast');
-  new Merch('bubblegum');
-  new Merch('chair');
-  new Merch('cthulhu');
-  new Merch('dog-duck');
-  new Merch('pen');
-  new Merch('pet-sweep');
-  new Merch('dragon');
-  new Merch('scissors');
-  new Merch('shark');
-  new Merch('sweep', 'png');
-  new Merch('tauntaun');
-  new Merch('unicorn');
-  new Merch('water-can');
-  new Merch('wine-glass');
+//items
+new Merch('bag');
+new Merch('banana');
+new Merch('bathroom');
+new Merch('boots');
+new Merch('breakfast');
+new Merch('bubblegum');
+new Merch('chair');
+new Merch('cthulhu');
+new Merch('dog-duck');
+new Merch('pen');
+new Merch('pet-sweep');
+new Merch('dragon');
+new Merch('scissors');
+new Merch('shark');
+new Merch('sweep', 'png');
+new Merch('tauntaun');
+new Merch('unicorn');
+new Merch('water-can');
+new Merch('wine-glass');
 // }
 console.log(allMerch);
 
