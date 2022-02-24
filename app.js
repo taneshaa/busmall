@@ -3,7 +3,10 @@
 // img/merch storage
 let votesLimit = 20;
 
+
+//length gives us a number of things in the array
 let allMerch = [];
+console.log(allMerch.length);
 
 // DOM references
 let container = document.getElementById('container');
@@ -22,9 +25,23 @@ function Merch(name, fileExtentsion = 'jpeg') {
   this.clicks = 0;
   this.src = `img/${name}.${fileExtentsion}`;
   allMerch.push(this);
+  console.log(allMerch.length);
+}
+ 
+
+//takes the data and stores in it local browser (array in this case means collected data) 
+function setLocalStorage(array) {
+  localStorage.setItem('cart', JSON.stringify(array));
 }
 
+function getLocalStorage(array) {
+  localStorage.getItem('cart', JSON.parse(array));
+}
 
+// checking for items in allMerch, if there are none in allMerch, it makes the items using newMerch
+//if (allMerch.length === 0) {
+
+//items
 new Merch('bag');
 new Merch('banana');
 new Merch('bathroom');
@@ -44,7 +61,7 @@ new Merch('tauntaun');
 new Merch('unicorn');
 new Merch('water-can');
 new Merch('wine-glass');
-
+// }
 console.log(allMerch);
 
 function getRandomIndex() {
@@ -63,17 +80,6 @@ function renderImgs() {
   let imgTwoIndex = randomIndexes.shift();
   let imgThreeIndex = randomIndexes.shift();
 
-  // while (imgOneIndex === imgTwoIndex) {
-  //   imgTwoIndex = getRandomIndex();
-  // }
-
-  // while (imgTwoIndex === imgThreeIndex) {
-  //   imgThreeIndex = getRandomIndex();
-  // }
-
-  // while (imgOneIndex === imgThreeIndex) {
-  //   imgOneIndex = getRandomIndex();
-  // }
 
 
   imgOne.src = allMerch[imgOneIndex].src;
@@ -95,27 +101,36 @@ renderImgs();
 function handleClick(event) {
   votesLimit--;
 
+  console.log('this is the event targer', event.target);
+
   let imgClicked = event.target.alt;
 
+  // looping through all merch array (line 6) and checking if image clicked alt text(line 92) matches the item in the array, if it does then it increases items clicks
   for (let i = 0; i < allMerch.length; i++) {
     if (imgClicked === allMerch[i].name) {
       allMerch[i].clicks++;
     }
   }
 
+
+
+  // makes 3 random images that are different from the last 3, appear on page
   renderImgs();
 
+  //removes ability to clik on image once(see line 4) it gets to 0, and renders chart
   if (votesLimit === 0) {
     container.removeEventListener('click', handleClick);
     renderChart();
   }
 }
-
+// first 3 steps of render chart- setting up empty array that will later be filled in
 function renderChart() {
   let itemNames = [];
   let itemVotes = [];
   let itemViews = [];
+  setLocalStorage(allMerch)
 
+  // looping through how many items(merch photos) there is
   for (let i = 0; i < allMerch.length; i++) {
     itemNames.push(allMerch[i].name);
     itemVotes.push(allMerch[i].clicks);
@@ -179,32 +194,6 @@ function renderChart() {
   new Chart(ctx, chartObject);
 }
 
-// function handleShowResults(event) {
-
-//   if (votesLimit === 0) {
-//     for (let i = 0; i < allMerch.length; i++) {
-//       let li = document.createElement('li');
-//       li.textContent = `${allMerch[i].name} was viewed ${allMerch[i].views} times, and was voted for ${allMerch[i].clicks} times.`;
-//       showResults.appendChild(li);
-//     }
-//   }
-// }
 
 container.addEventListener('click', handleClick);
-
-// resultsBtn.addEventListener('click', handleShowResults);
-
-// while(itemOne === itemTwo){
-//   itemTwo = getRandomImg();
-// }
-
-// while (itemOne === itemThree || itemTwo === itemThree){
-//   itemThree = getRandomImg();
-// }
-
-// while(randomIndexes.length < 3){
-//   let randoNum = getRandomImg();
-//   while(!randomIndexes.includes(randoNum));
-//   randomIndexes.push(randoNum);
-// }
 
