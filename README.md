@@ -1,1 +1,2 @@
 # busmall
+I keep forgetting to update my README files because i've been so focused on making sure my code works. So basically, when you open up the site you'll be able to vote on different photos (via clicking one) and the page will refresh after you vote. Once you get to the end you can clikc "show results" and a customized (super cool rainbow) chart is going to pop up at the bottom. This is where you can see which photos got views, and which ones got votes!
